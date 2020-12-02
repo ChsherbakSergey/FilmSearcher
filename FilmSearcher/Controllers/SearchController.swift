@@ -86,7 +86,6 @@ class SearchController: UIViewController {
         }
         
         movies.removeAll()
-        textField.text = ""
         
 //        https://www.omdbapi.com/?apikey=330741c4&s=\(query)&type=movie)
         let query = text.replacingOccurrences(of: " ", with: "%20")
@@ -107,6 +106,10 @@ class SearchController: UIViewController {
                 result = try JSONDecoder().decode(MovieResult.self, from: data)
             } catch {
                 print("Error converting")
+                DispatchQueue.main.async {
+                    self?.noFilmsView.isHidden = false
+                    self?.tableView.isHidden = true
+                }
             }
             
             guard let finalResult = result else {

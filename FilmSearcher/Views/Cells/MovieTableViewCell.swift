@@ -12,6 +12,7 @@ class MovieTableViewCell: UITableViewCell {
     //Views that will be displayed on this cell
     private let posterImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFill
         imageView.layer.masksToBounds = true
         return imageView
     }()
