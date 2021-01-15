@@ -20,12 +20,9 @@ class SearchController: UIViewController {
     
     private let textField: UITextField = {
         let field = UITextField()
-//        field.borderStyle = .roundedRect
         field.borderStyle = .none
         field.textColor = .label
         field.placeholder = "Search for a movie..."
-//        field.layer.borderWidth = 1
-//        field.layer.borderColor = UIColor.label.cgColor
         field.layer.cornerRadius = 10
         return field
     }()
@@ -34,12 +31,14 @@ class SearchController: UIViewController {
     
     //Constants and variables
     var movies = [Movie]()
+    var moviesManager = MoviesManager()
     
-    //Life cycle
+    //Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setInitialUI()
         setDelegates()
+        moviesManager.delagate = self
     }
     
     override func viewDidLayoutSubviews() {
@@ -66,7 +65,6 @@ class SearchController: UIViewController {
     
     ///Sets the layout of noFilmsView
     private func layoutNoNotificationView() {
-//        tableView.isHidden = true
         noFilmsView.frame = CGRect(x: 0, y: 0, width: view.width / 2, height: view.height / 5)
         noFilmsView.center = view.center
     }
@@ -77,6 +75,7 @@ class SearchController: UIViewController {
         textField.delegate = self
     }
     
+    ///Searches for movies and returns the result back
     private func searchForMovies() {
         //To hide the keyboard
         textField.resignFirstResponder()
@@ -87,47 +86,7 @@ class SearchController: UIViewController {
         
         movies.removeAll()
         
-//        https://www.omdbapi.com/?apikey=330741c4&s=\(query)&type=movie)
-        let query = text.replacingOccurrences(of: " ", with: "%20")
-        
-        let urlString = URL(string: "https://www.omdbapi.com/?apikey=330741c4&s=\(query)&type=movie")
-        guard let url = urlString else {
-            return
-        }
-        URLSession.shared.dataTask(with: url, completionHandler: { [weak self] data, response, error in
-            guard let data = data, error == nil else {
-                print("Error while getting url occured")
-                return
-            }
-            
-            //Convert
-            var result: MovieResult?
-            do {
-                result = try JSONDecoder().decode(MovieResult.self, from: data)
-            } catch {
-                print("Error converting")
-                DispatchQueue.main.async {
-                    self?.noFilmsView.isHidden = false
-                    self?.tableView.isHidden = true
-                }
-            }
-            
-            guard let finalResult = result else {
-                return
-            }
-            
-            //Append data to movies array
-            let newMovies = finalResult.Search
-            self?.movies.append(contentsOf: newMovies)
-            
-            //Reload data
-            DispatchQueue.main.async {
-                self?.noFilmsView.isHidden = true
-                self?.tableView.isHidden = false
-                self?.tableView.reloadData()
-            }
-            
-        }).resume()
+        moviesManager.getMovies(for: text)
     }
     
 }
@@ -138,7 +97,6 @@ extension SearchController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return movies.count
-//        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -172,10 +130,35 @@ extension SearchController: UITableViewDelegate, UITableViewDataSource {
 //MARK: - UITextFieldDelegate Realization
 
 extension SearchController: UITextFieldDelegate {
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         searchForMovies()
         return true
     }
     
+    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
+        if textField.text == "" {
+            textField.endEditing(true)
+            DispatchQueue.main.async { [weak self] in
+                self?.noFilmsView.isHidden = false
+                self?.tableView.isHidden = true
+            }
+        }
+    }
+}
+
+//MARK: - MoviesManagerDelegate
+
+extension SearchController: MoviesManagerDelegate {
+    func didUpdateMovies(_ moviesManager: MoviesManager, moviesModel: MovieResult) {
+        self.movies = moviesModel.Search
+        DispatchQueue.main.async { [weak self] in
+            self?.noFilmsView.isHidden = true
+            self?.tableView.isHidden = false
+            self?.tableView.reloadData()
+        }
+    }
+    
+    func didFailed(with error: Error) {
+        print("Error fetching movies : \(error)")
+    }
 }

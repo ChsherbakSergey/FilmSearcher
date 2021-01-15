@@ -17,6 +17,7 @@
 		A54F18CB2576F71400BE10DD /* MovieTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54F18CA2576F71400BE10DD /* MovieTableViewCell.swift */; };
 		A54F18CE2577043300BE10DD /* NoFilmsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54F18CD2577043300BE10DD /* NoFilmsView.swift */; };
 		A54F18D12577049900BE10DD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54F18D02577049900BE10DD /* Extensions.swift */; };
+		A559A1AA25B1B1A000177152 /* MoviesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A559A1A925B1B1A000177152 /* MoviesManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		A54F18CA2576F71400BE10DD /* MovieTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieTableViewCell.swift; sourceTree = "<group>"; };
 		A54F18CD2577043300BE10DD /* NoFilmsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoFilmsView.swift; sourceTree = "<group>"; };
 		A54F18D02577049900BE10DD /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		A559A1A925B1B1A000177152 /* MoviesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				A54F18C42576E0A300BE10DD /* Movies.swift */,
+				A559A1A925B1B1A000177152 /* MoviesManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -201,6 +204,7 @@
 				A54F18B22576DAAE00BE10DD /* SearchController.swift in Sources */,
 				A54F18AE2576DAAE00BE10DD /* AppDelegate.swift in Sources */,
 				A54F18CE2577043300BE10DD /* NoFilmsView.swift in Sources */,
+				A559A1AA25B1B1A000177152 /* MoviesManager.swift in Sources */,
 				A54F18C52576E0A300BE10DD /* Movies.swift in Sources */,
 				A54F18B02576DAAE00BE10DD /* SceneDelegate.swift in Sources */,
 				A54F18D12577049900BE10DD /* Extensions.swift in Sources */,
